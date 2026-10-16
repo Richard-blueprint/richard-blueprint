@@ -1,0 +1,106 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#07111c">
+<meta name="description" content="The Richard Blueprint — a personal brand built around discipline, career growth, financial independence, and purposeful work.">
+<title>The Richard Blueprint | Plan. Work. Grow.</title>
+<style>
+:root{--bg:#07111c;--panel:#0d1a28;--gold:#e7bd69;--gold2:#f6dda1;--text:#f4f1e8;--muted:#b8c1ca;--line:rgba(231,189,105,.25);--green:#a7d7bc}
+*{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;background:radial-gradient(ellipse at 80% 0%,#172a3a 0,transparent 38%),var(--bg);color:var(--text);font-family:Inter,ui-sans-serif,system-ui,-apple-system,BlinkMacSystemFont,"Segoe UI",sans-serif;line-height:1.6}a{color:inherit}button,a{touch-action:manipulation}.wrap{width:min(1100px,92%);margin:auto}.nav{display:flex;align-items:center;justify-content:space-between;gap:18px;padding:22px 0;border-bottom:1px solid var(--line)}.brand{display:flex;align-items:center;gap:12px;text-decoration:none}.monogram{width:42px;height:42px;border:1px solid var(--gold);border-radius:12px;display:grid;place-items:center;color:var(--gold2);font-family:Georgia,serif;font-size:21px;font-weight:700}.brand strong{display:block;letter-spacing:.08em;font-size:.9rem}.brand small{display:block;color:var(--muted);font-size:.7rem;letter-spacing:.13em;text-transform:uppercase}.navlinks{display:flex;gap:22px;align-items:center}.navlinks a{text-decoration:none;color:var(--muted);font-size:.9rem}.navlinks a:hover{color:var(--gold2)}.menu{display:none;background:transparent;color:var(--text);border:1px solid var(--line);border-radius:9px;padding:8px 12px}.hero{padding:80px 0 64px;display:grid;grid-template-columns:1.2fr .8fr;align-items:center;gap:44px}.eyebrow{color:var(--gold);font-size:.78rem;letter-spacing:.2em;text-transform:uppercase;font-weight:700}.hero h1{font-family:Georgia,"Times New Roman",serif;font-size:clamp(2.8rem,7vw,5.6rem);line-height:.98;letter-spacing:-.045em;margin:18px 0 24px}.hero h1 span{color:var(--gold2)}.hero p{font-size:1.08rem;color:var(--muted);max-width:600px}.actions{display:flex;gap:12px;flex-wrap:wrap;margin-top:28px}.btn{display:inline-flex;align-items:center;justify-content:center;text-decoration:none;padding:12px 18px;border-radius:10px;font-weight:700;border:1px solid var(--gold);transition:transform .15s,background .15s}.btn:hover{transform:translateY(-2px)}.primary{background:var(--gold);color:#111722}.secondary{color:var(--gold2);background:transparent}.crest{border:1px solid var(--line);border-radius:24px;background:linear-gradient(145deg,rgba(231,189,105,.09),rgba(13,26,40,.9));padding:30px;text-align:center;box-shadow:0 22px 65px rgba(0,0,0,.22)}.shield{width:170px;height:190px;margin:0 auto 18px;clip-path:polygon(50% 0,94% 15%,88% 68%,50% 100%,12% 68%,6% 15%);border:0;background:linear-gradient(145deg,#f5d990,#986b2e);display:grid;place-items:center;position:relative}.shield:before{content:"";position:absolute;inset:5px;background:#0a1723;clip-path:polygon(50% 0,94% 15%,88% 68%,50% 100%,12% 68%,6% 15%)}.shield span{position:relative;font-family:Georgia,serif;font-size:4.2rem;color:var(--gold2);font-weight:bold}.crest h2{font-family:Georgia,serif;font-size:1.5rem;margin:0;color:var(--gold2)}.crest p{font-size:.85rem;margin:8px 0 0}.tagline{letter-spacing:.18em;text-transform:uppercase;font-size:.75rem;color:var(--gold);margin-top:18px}.quote{border-top:1px solid var(--line);border-bottom:1px solid var(--line);padding:23px 0;text-align:center;color:var(--gold2);font-family:Georgia,serif;font-size:clamp(1.2rem,3vw,1.8rem)}section{padding:66px 0}.section-head{max-width:680px;margin-bottom:28px}.section-head h2{font-family:Georgia,serif;font-size:clamp(2rem,4vw,3rem);line-height:1.1;margin:8px 0 12px}.section-head p{color:var(--muted);margin:0}.grid{display:grid;grid-template-columns:repeat(3,1fr);gap:16px}.card{background:rgba(13,26,40,.82);border:1px solid var(--line);border-radius:17px;padding:24px}.symbol{font-size:1.5rem;color:var(--gold2)}.card h3{margin:10px 0 8px;font-size:1.1rem}.card p{margin:0;color:var(--muted);font-size:.94rem}.pill{display:inline-block;border:1px solid var(--line);color:var(--gold2);border-radius:100px;padding:5px 10px;font-size:.75rem;margin:5px 5px 0 0}.split{display:grid;grid-template-columns:1fr 1fr;gap:22px}.list{padding:0;list-style:none}.list li{padding:11px 0;border-bottom:1px solid var(--line);color:var(--muted)}.list li:before{content:"✦";color:var(--gold);margin-right:10px}.callout{background:linear-gradient(120deg,rgba(231,189,105,.12),rgba(13,26,40,.9));border:1px solid var(--line);border-radius:20px;padding:30px;display:flex;justify-content:space-between;align-items:center;gap:22px}.callout h2{font-family:Georgia,serif;font-size:clamp(1.6rem,4vw,2.4rem);margin:0 0 8px}.callout p{margin:0;color:var(--muted)}.contact-box{max-width:720px}.contact-box label{display:block;color:var(--muted);font-size:.88rem;margin:12px 0 5px}.contact-box input,.contact-box textarea{width:100%;padding:12px 13px;background:#07111c;border:1px solid var(--line);border-radius:9px;color:var(--text);font:inherit}.contact-box textarea{min-height:110px;resize:vertical}.notice{font-size:.82rem;color:var(--muted)}footer{border-top:1px solid var(--line);padding:25px 0;color:var(--muted);font-size:.82rem}.foot{display:flex;justify-content:space-between;gap:12px;flex-wrap:wrap}.gold{color:var(--gold2)}.hidden{display:none!important}
+@media(max-width:760px){.nav{align-items:flex-start}.menu{display:block}.navlinks{display:none;position:absolute;top:78px;right:4%;z-index:10;background:#0d1a28;border:1px solid var(--line);border-radius:12px;padding:14px;flex-direction:column;align-items:flex-start;min-width:180px}.navlinks.open{display:flex}.hero{grid-template-columns:1fr;padding:54px 0 42px;gap:28px}.crest{max-width:420px;width:100%;margin:auto}.grid{grid-template-columns:1fr}.split{grid-template-columns:1fr}.callout{align-items:flex-start;flex-direction:column}section{padding:48px 0}.shield{width:140px;height:158px}.shield span{font-size:3.5rem}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}*{transition:none!important}}
+</style>
+</head>
+<body>
+<header class="wrap">
+  <nav class="nav" aria-label="Main navigation">
+    <a class="brand" href="#home" aria-label="The Richard Blueprint home">
+      <span class="monogram">RY</span><span><strong>THE RICHARD BLUEPRINT</strong><small>Plan · Work · Grow</small></span>
+    </a>
+    <button class="menu" id="menuButton" aria-expanded="false" aria-controls="navLinks">Menu</button>
+    <div class="navlinks" id="navLinks">
+      <a href="#about">About</a><a href="#pillars">My pillars</a><a href="#goals">Goals</a><a href="#contact">Contact</a>
+    </div>
+  </nav>
+</header>
+<main>
+  <section class="wrap hero" id="home">
+    <div>
+      <div class="eyebrow">A personal brand in progress</div>
+      <h1>Same Richard.<br><span>Bigger vision.</span></h1>
+      <p>I’m building a future rooted in knowledge, consistent work, financial growth, and purposeful living. This is my space to document the journey, develop my skills, and create opportunities that last.</p>
+      <div class="actions"><a class="btn primary" href="#goals">Explore my blueprint ↗</a><a class="btn secondary" href="#about">My story</a></div>
+    </div>
+    <aside class="crest" aria-label="Richard Yankson personal emblem">
+      <div class="shield"><span>R</span></div>
+      <h2>Richard Yankson</h2>
+      <p>Knowledge to serve. Discipline to grow.</p>
+      <div class="tagline">Discipline · Growth · Purpose · Impact</div>
+    </aside>
+  </section>
+  <div class="wrap quote">“Discipline today builds the freedom I want tomorrow.”</div>
+  <section class="wrap" id="about">
+    <div class="section-head"><div class="eyebrow">The person behind the plan</div><h2>Build the life.<br>Become the person.</h2><p>The Richard Blueprint is my personal platform for learning in public, growing professionally, and laying the groundwork for future business ideas. I’m at the beginning, and I’m committed to making steady progress.</p></div>
+    <div class="split">
+      <article class="card"><div class="symbol">◎</div><h3>My vision</h3><p>To build a stable and meaningful future, become a respected professional, and achieve financial independence through useful skills, responsible choices, and consistent effort.</p></article>
+      <article class="card"><div class="symbol">↗</div><h3>My mission</h3><p>Learn continuously, do honest work, manage money with intention, and turn ideas into practical projects that create value for other people.</p></article>
+    </div>
+  </section>
+  <section class="wrap" id="pillars">
+    <div class="section-head"><div class="eyebrow">My foundation</div><h2>Five pillars. One direction.</h2><p>The values I want my decisions and future work to reflect.</p></div>
+    <div class="grid">
+      <article class="card"><div class="symbol">✚</div><h3>Knowledge to serve</h3><p>Keep learning and build the knowledge and care needed for a nursing career.</p><span class="pill">Education</span><span class="pill">Service</span></article>
+      <article class="card"><div class="symbol">▤</div><h3>Work with purpose</h3><p>Show up, solve real problems, communicate clearly, and earn trust through reliability.</p><span class="pill">Career</span><span class="pill">Leadership</span></article>
+      <article class="card"><div class="symbol">↗</div><h3>Grow my income</h3><p>Track spending, save consistently when possible, and explore honest ways to increase earnings.</p><span class="pill">Money</span><span class="pill">Skills</span></article>
+      <article class="card"><div class="symbol">◇</div><h3>Build discipline</h3><p>Make thoughtful decisions, manage my reactions, and keep going when progress feels slow.</p><span class="pill">Consistency</span></article>
+      <article class="card"><div class="symbol">⌂</div><h3>Create stability</h3><p>Work toward a secure future that gives me room to support family and live with peace.</p><span class="pill">Independence</span></article>
+      <article class="card"><div class="symbol">✦</div><h3>Make an impact</h3><p>Build projects and relationships around honesty, respect, usefulness, and shared growth.</p><span class="pill">Purpose</span></article>
+    </div>
+  </section>
+  <section class="wrap" id="goals">
+    <div class="section-head"><div class="eyebrow">Turn intention into action</div><h2>My blueprint for progress.</h2><p>These are working goals, not claims of achievements. I’ll update them as I make progress.</p></div>
+    <div class="split">
+      <article class="card"><h3 class="gold">Next 12 months</h3><ul class="list"><li>Progress steadily in my nursing programme.</li><li>Build useful digital, communication, and professional skills.</li><li>Track income and expenses every month.</li><li>Start a small portfolio of projects and learning notes.</li><li>Research realistic business ideas before investing money.</li></ul></article>
+      <article class="card"><h3 class="gold">Long-term direction</h3><ul class="list"><li>Become a qualified, trusted professional.</li><li>Build a stronger income and a sustainable savings habit.</li><li>Develop a business or additional income stream responsibly.</li><li>Work toward long-term financial independence.</li><li>Use my experience to create value for others.</li></ul></article>
+    </div>
+  </section>
+  <section class="wrap">
+    <div class="callout"><div><div class="eyebrow">The daily standard</div><h2>Plan. Work. Grow. Repeat.</h2><p>One useful step every day is better than waiting for the perfect moment.</p></div><a class="btn primary" href="#contact">Start a conversation ↗</a></div>
+  </section>
+  <section class="wrap" id="contact">
+    <div class="section-head"><div class="eyebrow">Get in touch</div><h2>Let’s connect.</h2><p>For career opportunities, collaborations, or future business enquiries, use this starter contact form.</p></div>
+    <div class="card contact-box">
+      <form id="contactForm">
+        <label for="senderName">Your name</label><input id="senderName" name="senderName" autocomplete="name" required placeholder="Enter your name">
+        <label for="senderEmail">Your email</label><input id="senderEmail" name="senderEmail" type="email" autocomplete="email" required placeholder="you@example.com">
+        <label for="message">Your message</label><textarea id="message" name="message" required placeholder="How can we connect?"></textarea>
+        <div class="actions"><button class="btn primary" type="submit">Prepare email</button><button class="btn secondary" type="reset">Clear form</button></div>
+        <p class="notice" id="formNotice" role="status">This starter form opens your email app; it does not send or store messages on this website. Add a real contact email before publishing.</p>
+      </form>
+    </div>
+  </section>
+</main>
+<footer><div class="wrap foot"><span>© <span id="year"></span> The Richard Blueprint</span><span>Built on <span class="gold">discipline, growth, purpose, and impact.</span></span></div></footer>
+<script>
+const menuButton=document.getElementById('menuButton');
+const navLinks=document.getElementById('navLinks');
+menuButton.addEventListener('click',()=>{const open=navLinks.classList.toggle('open');menuButton.setAttribute('aria-expanded',String(open));});
+navLinks.querySelectorAll('a').forEach(link=>link.addEventListener('click',()=>{navLinks.classList.remove('open');menuButton.setAttribute('aria-expanded','false');}));
+document.getElementById('year').textContent=new Date().getFullYear();
+document.getElementById('contactForm').addEventListener('submit',event=>{
+ event.preventDefault();
+ const name=document.getElementById('senderName').value.trim();
+ const email=document.getElementById('senderEmail').value.trim();
+ const message=document.getElementById('message').value.trim();
+ // Replace this placeholder with Richard's public contact email before publishing.
+ const recipient='';
+ if(!recipient){document.getElementById('formNotice').textContent='Your message is ready, but the site owner has not added a contact email yet. For privacy, no details were sent or saved. Add your email address in the website code before publishing.';return;}
+ const subject=encodeURIComponent('Website enquiry from '+name);
+ const body=encodeURIComponent(message+'\n\nFrom: '+name+'\nEmail: '+email);
+ window.location.href='mailto:'+recipient+'?subject='+subject+'&body='+body;
+});
+</script>
+</body>
+</html>
