@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<meta name="theme-color" content="#17365d">
+<title>Richard's Overtime Tracker</title>
+<style>
+:root{--navy:#17365d;--blue:#eaf2f8;--ink:#1d2733;--muted:#617080;--line:#d8e0e8;--bg:#f4f7fa;--green:#1c6b43;--greenbg:#e4f3e9;--amber:#8a5a00;--amberbg:#fff3d6;--red:#9b2c2c;--redbg:#fde8e8}
+*{box-sizing:border-box}
+body{margin:0;background:var(--bg);color:var(--ink);font:16px/1.45 -apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif}
+header{background:var(--navy);color:#fff;padding:22px 16px 18px}
+.wrap{max-width:1050px;margin:0 auto}
+header h1{font-size:1.45rem;margin:0 0 5px}
+header p{margin:0;color:#dce8f3;font-size:.94rem}
+main{max-width:1050px;margin:0 auto;padding:16px}
+nav{display:flex;gap:8px;overflow:auto;margin-bottom:16px;padding-bottom:2px}
+nav button{border:1px solid var(--line);background:#fff;color:var(--navy);border-radius:10px;padding:10px 14px;white-space:nowrap;font-weight:650}
+nav button.active{background:var(--navy);color:#fff;border-color:var(--navy)}
+.panel{display:none}.panel.active{display:block}
+.card{background:#fff;border:1px solid var(--line);border-radius:15px;padding:16px;margin-bottom:14px;box-shadow:0 2px 8px #17365d08}
+h2{font-size:1.12rem;margin:0 0 12px}h3{font-size:1rem;margin:0 0 10px}
+.grid{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}
+.kpis{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;margin-bottom:14px}
+.kpi{background:#fff;border:1px solid var(--line);border-radius:13px;padding:13px}
+.kpi .label{color:var(--muted);font-size:.8rem}.kpi .value{font-size:1.25rem;font-weight:750;margin-top:4px;overflow-wrap:anywhere}
+label{display:block;font-size:.88rem;font-weight:650;margin-bottom:5px}
+input,select,textarea{font:inherit;width:100%;padding:11px 10px;border:1px solid #bcc9d6;border-radius:9px;background:#fff;color:var(--ink);min-height:44px}
+input:focus,select:focus,textarea:focus{outline:2px solid #87b7e0;border-color:#3778ad}
+.field{min-width:0}.full{grid-column:1/-1}
+button{font:inherit;cursor:pointer}
+.primary,.secondary,.danger{border:0;border-radius:10px;padding:11px 14px;font-weight:700;min-height:44px}
+.primary{background:var(--navy);color:#fff}.secondary{background:var(--blue);color:var(--navy)}.danger{background:var(--redbg);color:var(--red)}
+.actions{display:flex;flex-wrap:wrap;gap:8px;margin-top:14px}
+.note{font-size:.86rem;color:var(--muted);margin:8px 0 0}
+.tablewrap{overflow-x:auto}
+table{border-collapse:collapse;width:100%;min-width:680px;font-size:.88rem}
+th,td{text-align:left;padding:10px 9px;border-bottom:1px solid var(--line);vertical-align:top}
+th{background:#f0f5f9;color:var(--navy);font-weight:750}
+.pill{display:inline-block;padding:3px 8px;border-radius:999px;font-size:.78rem;font-weight:700}
+.ok{background:var(--greenbg);color:var(--green)}.warn{background:var(--amberbg);color:var(--amber)}.bad{background:var(--redbg);color:var(--red)}
+.empty{color:var(--muted);text-align:center;padding:24px 8px}
+.hidden{display:none!important}
+footer{max-width:1050px;margin:0 auto;padding:0 16px 26px;color:var(--muted);font-size:.8rem}
+@media(min-width:720px){header{padding:28px 24px}main{padding:24px}.grid{grid-template-columns:repeat(3,minmax(0,1fr))}.kpis{grid-template-columns:repeat(4,minmax(0,1fr))}.kpi .value{font-size:1.35rem}}
+@media(max-width:390px){main{padding:10px}.card{padding:13px}.grid{gap:9px}}
+</style>
+</head>
+<body>
+<header><div class="wrap"><h1>Richard's Overtime Tracker</h1><p>Log extra hours, record payslip amounts, and check the difference.</p></div></header>
+<main>
+<nav aria-label="Main sections">
+<button class="active" data-tab="dashboard">Dashboard</button>
+<button data-tab="log">Add overtime</button>
+<button data-tab="payslip">Payslip check</button>
+<button data-tab="rates">Rates & backup</button>
+</nav>
+
+<section id="dashboard" class="panel active">
+<div class="card">
+<div class="grid">
+<div class="field"><label for="monthFilter">Choose month</label><input type="month" id="monthFilter"></div>
+<div class="field"><label for="dashCategory">Filter overtime category</label><select id="dashCategory"><option value="All">All categories</option><option>Weekday</option><option>Saturday</option><option>Sunday</option><option>Public Holiday</option></select></div>
+</div>
+</div>
+<div class="kpis">
+<div class="kpi"><div class="label">Overtime hours</div><div class="value" id="kHours">0.00</div></div>
+<div class="kpi"><div class="label">Expected OT pay</div><div class="value" id="kExpected">GH₵0.00</div></div>
+<div class="kpi"><div class="label">Actual payslip total</div><div class="value" id="kActual">Not entered</div></div>
+<div class="kpi"><div class="label">Difference (actual − expected)</div><div class="value" id="kDiff">Not entered</div></div>
+</div>
+<div class="card"><h2>Overtime entries</h2><div id="entryTable" class="tablewrap"></div></div>
+<div class="card"><h2>Category comparison</h2><div id="categoryTable" class="tablewrap"></div></div>
+<div class="card"><h2>Combined payslip total check</h2><div id="totalCheck">Enter your monthly payslip amounts in Payslip check.</div></div>
+</section>
+
+<section id="log" class="panel">
+<div class="card">
+<h2 id="entryFormTitle">Add an overtime shift</h2>
+<form id="entryForm">
+<input type="hidden" id="editId">
+<div class="grid">
+<div class="field"><label for="otDate">Date worked</label><input id="otDate" type="date" required></div>
+<div class="field"><label for="otCategory">Overtime category</label><select id="otCategory" required><option>Weekday</option><option>Saturday</option><option>Sunday</option><option>Public Holiday</option></select></div>
+<div class="field"><label for="startTime">Start time</label><input id="startTime" type="time" required></div>
+<div class="field"><label for="endTime">End time</label><input id="endTime" type="time" required></div>
+<div class="field"><label for="breakHours">Unpaid break (hours)</label><input id="breakHours" type="number" min="0" max="24" step="0.25" value="0" required></div>
+<div class="field"><label for="hourlyRate">Hourly rate (GH₵)</label><input id="hourlyRate" type="number" min="0" step="0.01" required></div>
+<div class="field full"><label for="otNotes">Notes (optional)</label><input id="otNotes" type="text" maxlength="200" placeholder="e.g. Saturday shift, line support"></div>
+</div>
+<p class="note">Overtime hours and expected pay are calculated automatically. If a shift crosses midnight, the calculator handles it.</p>
+<div class="actions"><button class="primary" type="submit">Save overtime shift</button><button class="secondary" type="button" id="cancelEdit">Clear form</button></div>
+</form>
+</div>
+</section>
+
+<section id="payslip" class="panel">
+<div class="card">
+<h2>Monthly payslip entry</h2>
+<p class="note">Enter each overtime category exactly as shown on your payslip, then enter the combined overtime total. The page compares actual category payments with your recorded shifts.</p>
+<form id="payslipForm">
+<div class="grid">
+<div class="field"><label for="payMonth">Payslip month</label><input type="month" id="payMonth" required></div>
+<div class="field"><label for="actualWeekday">Weekday OT paid (GH₵)</label><input id="actualWeekday" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div class="field"><label for="actualSaturday">Saturday OT paid (GH₵)</label><input id="actualSaturday" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div class="field"><label for="actualSunday">Sunday OT paid (GH₵)</label><input id="actualSunday" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div class="field"><label for="actualHoliday">Public holiday OT paid (GH₵)</label><input id="actualHoliday" type="number" min="0" step="0.01" placeholder="0.00"></div>
+<div class="field"><label for="actualTotal">Combined overtime total (GH₵)</label><input id="actualTotal" type="number" min="0" step="0.01" placeholder="Total shown on payslip"></div>
+<div class="field full"><label for="payNotes">Payslip notes (optional)</label><textarea id="payNotes" rows="2" placeholder="Payslip reference or anything you want to check"></textarea></div>
+</div>
+<div class="actions"><button class="primary" type="submit">Save payslip amounts</button><button class="secondary" type="button" id="loadPayslip">Load saved month</button></div>
+</form>
+</div>
+<div class="card"><h2>Selected month reconciliation</h2><div id="payReconciliation">Choose a month and enter payslip amounts.</div></div>
+</section>
+
+<section id="rates" class="panel">
+<div class="card">
+<h2>Default hourly rates</h2>
+<p class="note">These are editable starting values based on rates previously discussed. Confirm the approved rates with your payslip or employer.</p>
+<form id="ratesForm">
+<div class="grid">
+<div class="field"><label for="rateWeekday">Weekday (GH₵/hour)</label><input id="rateWeekday" type="number" min="0" step="0.01" required></div>
+<div class="field"><label for="rateSaturday">Saturday (GH₵/hour)</label><input id="rateSaturday" type="number" min="0" step="0.01" required></div>
+<div class="field"><label for="rateSunday">Sunday (GH₵/hour)</label><input id="rateSunday" type="number" min="0" step="0.01" required></div>
+<div class="field"><label for="rateHoliday">Public holiday (GH₵/hour)</label><input id="rateHoliday" type="number" min="0" step="0.01" required></div>
+</div>
+<div class="actions"><button class="primary" type="submit">Save rates</button></div>
+</form>
+</div>
+<div class="card">
+<h2>Your data and backups</h2>
+<p>Entries are saved in this browser on this device. They are not automatically uploaded or synced to another device. Export a backup regularly.</p>
+<div class="actions"><button class="secondary" id="exportCsv">Export overtime CSV</button><button class="secondary" id="exportBackup">Download full backup</button><label class="secondary" style="display:inline-flex;align-items:center;justify-content:center;cursor:pointer">Restore backup<input id="importBackup" type="file" accept="application/json,.json" style="display:none"></label><button class="danger" id="clearAll">Delete all saved data</button></div>
+<p class="note">Keep backup files private. Deleting browser data or switching browsers/devices can remove access to entries stored here.</p>
+</div>
+</section>
+</main>
+<footer>Personal tracker only. Check any difference against the employer's approved overtime rules and payslip calculations before drawing conclusions.</footer>
+<script>
+(function(){
+const CATS=["Weekday","Saturday","Sunday","Public Holiday"];
+const DEFAULTS={Weekday:5.40,Saturday:6.50,Sunday:6.50,"Public Holiday":8.70};
+const KEY="richard_overtime_tracker_v1";
+let state={entries:[],payslips:{},rates:{...DEFAULTS}};
+const $=id=>document.getElementById(id);
+const money=n=>"GH₵"+Number(n||0).toLocaleString("en-GH",{minimumFractionDigits:2,maximumFractionDigits:2});
+const num=v=>v===""||v==null?0:Number(v)||0;
+const monthNow=()=>{let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")};
+const today=()=>{let d=new Date();return d.getFullYear()+"-"+String(d.getMonth()+1).padStart(2,"0")+"-"+String(d.getDate()).padStart(2,"0")};
+function load(){try{const x=JSON.parse(localStorage.getItem(KEY)||"null");if(x&&typeof x==="object")state={...state,...x,rates:{...DEFAULTS,...(x.rates||{})},entries:Array.isArray(x.entries)?x.entries:[],payslips:x.payslips||{}}}catch(e){}}
+function save(){localStorage.setItem(KEY,JSON.stringify(state));renderDashboard();renderPayReconciliation();$('monthFilter').value=$('monthFilter').value||monthNow()}
+function hours(e){let [sh,sm]=e.start.split(":").map(Number),[eh,em]=e.end.split(":").map(Number);let mins=eh*60+em-(sh*60+sm);if(mins<0)mins+=1440;return Math.max(0,mins/60-num(e.breakHours))}
+function rate(e){return Number(e.rate??state.rates[e.category]??0)}
+function expected(e){return hours(e)*rate(e)}
+function esc(s){return String(s??"").replace(/[&<>"']/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#39;"}[c]))}
+function entriesForMonth(m,cat="All"){return state.entries.filter(e=>e.date&&e.date.slice(0,7)===m&&(cat==="All"||e.category===cat)).sort((a,b)=>a.date.localeCompare(b.date))}
+function totals(m,cat="All"){const es=entriesForMonth(m,cat);return {hours:es.reduce((s,e)=>s+hours(e),0),expected:es.reduce((s,e)=>s+expected(e),0),entries:es}}
+function actualCat(pay,cat){return pay&&pay.actual&&pay.actual[cat]!==""&&pay.actual[cat]!=null?Number(pay.actual[cat]):null}
+function status(diff){if(Math.abs(diff)<0.01)return '<span class="pill ok">Matches</span>';return diff<0?'<span class="pill bad">Below expected</span>':'<span class="pill warn">Above expected</span>'}
+function renderDashboard(){
+ const m=$('monthFilter').value||monthNow(),cat=$('dashCategory').value||"All",t=totals(m,cat),p=state.payslips[m];
+ $('kHours').textContent=t.hours.toFixed(2);$('kExpected').textContent=money(t.expected);
+ const actualTotal=p&&p.actualTotal!==""&&p.actualTotal!=null?num(p.actualTotal):null;
+ $('kActual').textContent=actualTotal===null?"Not entered":money(actualTotal);
+ $('kDiff').textContent=actualTotal===null?"Not entered":money(actualTotal-t.expected);
+ $('entryTable').innerHTML=t.entries.length?'<table><thead><tr><th>Date</th><th>Category</th><th>Hours</th><th>Rate</th><th>Expected pay</th><th>Notes / actions</th></tr></thead><tbody>'+t.entries.map(e=>`<tr><td>${esc(e.date)}</td><td>${esc(e.category)}</td><td>${hours(e).toFixed(2)}</td><td>${money(rate(e))}</td><td>${money(expected(e))}</td><td>${esc(e.notes)}<br><button class="secondary" data-edit="${esc(e.id)}">Edit</button> <button class="danger" data-delete="${esc(e.id)}">Delete</button></td></tr>`).join("")+'</tbody></table>':'<div class="empty">No overtime entries for this month yet. Add your first shift using “Add overtime”.</div>';
+ const cats=cat==="All"?CATS:[cat];
+ $('categoryTable').innerHTML='<table><thead><tr><th>Category</th><th>Hours</th><th>Expected</th><th>Actual payslip</th><th>Difference</th><th>Status</th></tr></thead><tbody>'+cats.map(c=>{let ct=totals(m,c),ac=actualCat(p,c),diff=ac===null?null:ac-ct.expected;return `<tr><td>${esc(c)}</td><td>${ct.hours.toFixed(2)}</td><td>${money(ct.expected)}</td><td>${ac===null?"Not entered":money(ac)}</td><td>${diff===null?"—":money(diff)}</td><td>${diff===null?'<span class="pill warn">Needs payslip entry</span>':status(diff)}</td></tr>`}).join("")+'</tbody></table>';
+ if(!p){$('totalCheck').innerHTML='No payslip entry saved for '+esc(m)+'. Open Payslip check to enter category amounts and the combined total.'}
+ else {let catsum=CATS.reduce((s,c)=>s+(actualCat(p,c)??0),0),at=p.actualTotal!==""&&p.actualTotal!=null?num(p.actualTotal):null;
+ $('totalCheck').innerHTML=`<p>Sum of category payments: <strong>${money(catsum)}</strong></p><p>Combined payslip total: <strong>${at===null?"Not entered":money(at)}</strong></p>${at===null?'<span class="pill warn">Enter the combined total</span>':Math.abs(catsum-at)<0.01?'<span class="pill ok">Category total matches combined total</span>':'<span class="pill bad">Category total differs from combined total by '+money(catsum-at)+'</span>'}`}
+}
+function renderPayReconciliation(){
+ const m=$('payMonth').value||$('monthFilter').value||monthNow(),p=state.payslips[m],all=totals(m);
+ if(!p){$('payReconciliation').innerHTML=`Expected total for ${esc(m)}: <strong>${money(all.expected)}</strong><p class="note">No payslip amounts saved for this month yet.</p>`;return}
+ const rows=CATS.map(c=>{const ex=totals(m,c).expected,ac=actualCat(p,c),d=ac===null?null:ac-ex;return `<tr><td>${esc(c)}</td><td>${money(ex)}</td><td>${ac===null?"Not entered":money(ac)}</td><td>${d===null?"—":money(d)}</td><td>${d===null?'<span class="pill warn">Needs entry</span>':status(d)}</td></tr>`}).join("");
+ const sum=CATS.reduce((s,c)=>s+(actualCat(p,c)??0),0),at=p.actualTotal!==""&&p.actualTotal!=null?num(p.actualTotal):null;
+ $('payReconciliation').innerHTML=`<div class="tablewrap"><table><thead><tr><th>Category</th><th>Expected</th><th>Actual</th><th>Difference</th><th>Status</th></tr></thead><tbody>${rows}<tr><th>Total</th><th>${money(all.expected)}</th><th>${at===null?"Not entered":money(at)}</th><th>${at===null?"—":money(at-all.expected)}</th><th>${at===null?'<span class="pill warn">Needs entry</span>':status(at-all.expected)}</th></tr></tbody></table></div><p>Category amounts add up to <strong>${money(sum)}</strong>. Combined payslip total: <strong>${at===null?"Not entered":money(at)}</strong>.</p><p>${at===null?'<span class="pill warn">Enter combined total</span>':Math.abs(sum-at)<0.01?'<span class="pill ok">Category sum matches combined total</span>':'<span class="pill bad">Category sum differs by '+money(sum-at)+'</span>'}</p>`;
+}
+function setRateInputs(){ $('rateWeekday').value=state.rates.Weekday;$('rateSaturday').value=state.rates.Saturday;$('rateSunday').value=state.rates.Sunday;$('rateHoliday').value=state.rates["Public Holiday"] }
+function loadPayForm(m){const p=state.payslips[m];$('payMonth').value=m;if(!p){['actualWeekday','actualSaturday','actualSunday','actualHoliday','actualTotal','payNotes'].forEach(id=>$(id).value="");return}
+ $('actualWeekday').value=p.actual?.Weekday??"";$('actualSaturday').value=p.actual?.Saturday??"";$('actualSunday').value=p.actual?.Sunday??"";$('actualHoliday').value=p.actual?.["Public Holiday"]??"";$('actualTotal').value=p.actualTotal??"";$('payNotes').value=p.notes??""}
+function tab(name){document.querySelectorAll("nav button").forEach(b=>b.classList.toggle("active",b.dataset.tab===name));document.querySelectorAll(".panel").forEach(p=>p.classList.toggle("active",p.id===name));if(name==="payslip")renderPayReconciliation()}
+document.querySelectorAll("nav button").forEach(b=>b.addEventListener("click",()=>tab(b.dataset.tab)));
+$('monthFilter').value=monthNow();$('payMonth').value=monthNow();$('otDate').value=today();
+$('monthFilter').addEventListener("change",()=>{renderDashboard();if($('payMonth').value!==$('monthFilter').value)loadPayForm($('monthFilter').value);renderPayReconciliation()});
+$('dashCategory').addEventListener("change",renderDashboard);
+$('otCategory').addEventListener("change",()=>{$('hourlyRate').value=Number(state.rates[$('otCategory').value]||0).toFixed(2)});
+$('entryForm').addEventListener("submit",e=>{e.preventDefault();const id=$('editId').value||String(Date.now());const entry={id,date:$('otDate').value,category:$('otCategory').value,start:$('startTime').value,end:$('endTime').value,breakHours:num($('breakHours').value),rate:num($('hourlyRate').value),notes:$('otNotes').value.trim()};if(!entry.date||!entry.start||!entry.end){alert("Please complete the date and shift times.");return}if(hours(entry)<=0){if(!confirm("Calculated overtime hours are zero or less. Save this entry anyway?"))return}const ix=state.entries.findIndex(x=>x.id===id);if(ix>=0)state.entries[ix]=entry;else state.entries.push(entry);$('monthFilter').value=entry.date.slice(0,7);$('editId').value="";$('entryForm').reset();$('otDate').value=today();$('breakHours').value="0";$('hourlyRate').value=state.rates.Weekday.toFixed(2);$('entryFormTitle').textContent="Add an overtime shift";save();tab("dashboard")});
+$('cancelEdit').addEventListener("click",()=>{$('editId').value="";$('entryForm').reset();$('otDate').value=today();$('breakHours').value="0";$('hourlyRate').value=state.rates.Weekday.toFixed(2);$('entryFormTitle').textContent="Add an overtime shift"});
+$('entryTable').addEventListener("click",e=>{const ed=e.target.closest("[data-edit]"),del=e.target.closest("[data-delete]");if(ed){const x=state.entries.find(x=>x.id===ed.dataset.edit);if(!x)return;$('editId').value=x.id;$('otDate').value=x.date;$('otCategory').value=x.category;$('startTime').value=x.start;$('endTime').value=x.end;$('breakHours').value=x.breakHours;$('hourlyRate').value=rate(x);$('otNotes').value=x.notes||"";$('entryFormTitle').textContent="Edit overtime shift";tab("log");window.scrollTo({top:0,behavior:"smooth"})}if(del&&confirm("Delete this overtime entry?")){state.entries=state.entries.filter(x=>x.id!==del.dataset.delete);save()}});
+$('payslipForm').addEventListener("submit",e=>{e.preventDefault();const m=$('payMonth').value;if(!m)return;state.payslips[m]={actual:{Weekday:$('actualWeekday').value,Saturday:$('actualSaturday').value,Sunday:$('actualSunday').value,"Public Holiday":$('actualHoliday').value},actualTotal:$('actualTotal').value,notes:$('payNotes').value};$('monthFilter').value=m;save();renderPayReconciliation();alert("Payslip amounts saved in this browser.")});
+$('loadPayslip').addEventListener("click",()=>{const m=$('payMonth').value||monthNow();loadPayForm(m);renderPayReconciliation()});
+$('payMonth').addEventListener("change",()=>{loadPayForm($('payMonth').value);renderPayReconciliation()});
+$('ratesForm').addEventListener("submit",e=>{e.preventDefault();state.rates={Weekday:num($('rateWeekday').value),Saturday:num($('rateSaturday').value),Sunday:num($('rateSunday').value),"Public Holiday":num($('rateHoliday').value)};save();alert("Rates saved. Existing entries keep the rate recorded when they were entered.");});
+$('exportCsv').addEventListener("click",()=>{const rows=[["Date","Category","Start","End","Break hours","OT hours","Rate GHS","Expected pay GHS","Notes"],...state.entries.map(e=>[e.date,e.category,e.start,e.end,e.breakHours,hours(e).toFixed(2),rate(e).toFixed(2),expected(e).toFixed(2),e.notes||""])];const csv=rows.map(r=>r.map(v=>'"'+String(v??"").replace(/"/g,'""')+'"').join(",")).join("\r\n");download("richard-overtime.csv",csv,"text/csv;charset=utf-8")});
+$('exportBackup').addEventListener("click",()=>download("richard-overtime-backup.json",JSON.stringify(state,null,2),"application/json"));
+$('importBackup').addEventListener("change",async e=>{const f=e.target.files[0];if(!f)return;try{const x=JSON.parse(await f.text());if(!x||!Array.isArray(x.entries)||!x.rates||!x.payslips)throw new Error("Invalid backup");if(!confirm("Restore this backup? It will replace the data currently saved in this browser."))return;state=x;save();setRateInputs();loadPayForm($('monthFilter').value);alert("Backup restored.")}catch(err){alert("Could not restore that file. Please choose a valid backup exported from this tracker.")}e.target.value=""});
+$('clearAll').addEventListener("click",()=>{if(confirm("This will permanently delete overtime entries, rates, and payslip records saved in this browser. Export a backup first if you may need it. Are you sure?")){state={entries:[],payslips:{},rates:{...DEFAULTS}};save();setRateInputs();loadPayForm(monthNow());}});
+function download(name,content,type){const blob=new Blob([content],{type}),url=URL.createObjectURL(blob),a=document.createElement("a");a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();URL.revokeObjectURL(url)}
+load();setRateInputs();loadPayForm(monthNow());$('hourlyRate').value=Number(state.rates.Weekday).toFixed(2);renderDashboard();renderPayReconciliation();
+})();
+</script>
+</body>
+</html>
